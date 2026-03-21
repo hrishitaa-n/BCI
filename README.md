@@ -159,3 +159,19 @@ Pipeline([
     ('svm', SVC(kernel='rbf'))
 ])
 ````
+
+## 📊 Power BI Dashboard
+
+This dashboard visualizes subject-wise EEG classification performance.
+
+### Key Insights:
+- Average Accuracy: **0.72**
+- Maximum Accuracy: **0.96**
+- Minimum Accuracy: **0.53**
+- Performance categorized into: Excellent, Good, Moderate, Poor
+
+<p align="center">
+  <img src="results/powerbi_dashboard.PNG" width="700"/>
+</p>
+
+> Note: The Power BI (.pbix) file is not included due to size constraints.
