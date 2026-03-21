@@ -1,0 +1,7 @@
+BCICIV_2a_gdf/
+*.gdf
+*.edf
+*.zip
+*.pbix
+__pycache__/
+*.pyc
