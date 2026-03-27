@@ -7,6 +7,7 @@ import os
 from src.load_data import load_data
 from src.preprocess import bandpass_filter
 from src.model import train_svm
+from src.evaluation import evaluate_full   # ✅ import once at top
 
 
 # -------------------------
@@ -75,11 +76,19 @@ if __name__ == "__main__":
 
             print(f"Data shape: {X.shape}")
 
+            # -------------------------
+            # TRAIN MODEL
+            # -------------------------
             accuracy = train_svm(X, y)
 
             print(f"Accuracy: {accuracy:.4f}")
 
             accuracies.append(accuracy)
+
+            # -------------------------
+            # ✅ EVALUATION METRICS (ADDED HERE)
+            # -------------------------
+            evaluate_full(X, y, subject.replace(".gdf", ""))
 
         except Exception as e:
             print(f"Error processing {subject}: {e}")
