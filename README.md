@@ -1,156 +1,42 @@
-# Brain-Computer Interface (BCI) Motor Imagery Classification
+# 🧠 Brain-Computer Interface (BCI) Motor Imagery Classification
 
-This project implements a **Brain-Computer Interface (BCI) pipeline** that predicts imagined hand movements from EEG brain signals using machine learning.
+## 📌 Overview
 
-The system processes EEG signals recorded during **motor imagery tasks** and classifies whether the subject imagined moving their **left hand or right hand**.
+This project implements a **Brain-Computer Interface (BCI)** pipeline to
+classify imagined motor movements (**left vs right hand**) from EEG
+signals using machine learning.
 
----
-
-# Project Overview
-
-Brain–Computer Interfaces allow computers to interpret brain activity and convert it into commands.
-
-In this project, EEG signals are analyzed to detect **motor imagery**, where a subject imagines moving a body part without physically moving.
-
-Example:
-
-EEG Signal → Model → Predicted Movement  
-EEG Data → Machine Learning Model → LEFT HAND
-
-Applications include:
-
-- Assistive technology for paralysis patients
-- Prosthetic limb control
-- Neurorehabilitation
-- Human–computer interaction
+The system processes EEG recordings from motor imagery tasks and
+predicts user intent without physical movement.
 
 ---
 
-# Dataset
+## 🚀 Applications
 
-This project uses the **BCI Competition IV Dataset 2a**, which contains EEG recordings from multiple subjects performing motor imagery tasks.
-
-Each subject imagines one of four movements:
-
-- Left Hand
-- Right Hand
-- Feet
-- Tongue
-
-This project focuses on **binary classification**:
-
-Left Hand vs Right Hand
-
-Dataset source:  
-https://www.bbci.de/competition/iv/
+- Assistive technology for paralysis patients\
+- Prosthetic limb control\
+- Neurorehabilitation\
+- Human--computer interaction
 
 ---
 
-# Pipeline Overview
+## 📂 Dataset
 
-The system follows a structured machine learning pipeline:
-Raw EEG → Bandpass Filter → Event Extraction → Epoching → ML Pipeline → Accuracy
+- **BCI Competition IV Dataset 2a**
+- EEG recordings from multiple subjects
+- Classes:
+  - Left Hand (769)
+  - Right Hand (770)
 
-### ML Pipeline:
-
-CSP → StandardScaler → SVM → Cross-validation
-
----
-
-# Step-by-Step Method
-
-## 1. EEG Data Loading
-
-EEG recordings are loaded from `.gdf` files using the **MNE library**.
+🔗 https://www.bbci.de/competition/iv/
 
 ---
 
-## 2. Signal Filtering
+## ⚙️ Pipeline
 
-A **bandpass filter (8–30 Hz)** is applied to retain motor imagery-related frequencies (mu and beta rhythms).
+    Raw EEG → Bandpass Filter (8–30 Hz) → Event Extraction → Epoching → CSP → StandardScaler → SVM → Accuracy
 
----
-
-## 3. Event Extraction
-
-Event markers identify motor imagery tasks:
-
-| Code | Meaning    |
-| ---- | ---------- |
-| 769  | Left Hand  |
-| 770  | Right Hand |
-
-Only these two classes are used.
-
----
-
-## 4. Epoch Extraction
-
-Continuous EEG signals are segmented into **epochs (1s–4s)** around each event.
-
-Each epoch represents one trial.
-
----
-
-## 5. Feature Extraction + Classification
-
-Feature extraction and classification are combined using a **scikit-learn Pipeline**:
-
-````python
-Pipeline([
-    ('csp', CSP(n_components=4)),
-    ('scaler', StandardScaler()),
-    ('svm', SVC(kernel='rbf'))
-])
-
-
-
-
-
-
-
-
-
----
-
-# Step-by-Step Method
-
-## 1. EEG Data Loading
-
-EEG recordings are loaded from `.gdf` files using the **MNE library**.
-
----
-
-## 2. Signal Filtering
-
-A **bandpass filter (8–30 Hz)** is applied to retain motor imagery-related frequencies (mu and beta rhythms).
-
----
-
-## 3. Event Extraction
-
-Event markers identify motor imagery tasks:
-
-| Code | Meaning    |
-| ---- | ---------- |
-| 769  | Left Hand  |
-| 770  | Right Hand |
-
-Only these two classes are used.
-
----
-
-## 4. Epoch Extraction
-
-Continuous EEG signals are segmented into **epochs (1s–4s)** around each event.
-
-Each epoch represents one trial.
-
----
-
-## 5. Feature Extraction + Classification
-
-Feature extraction and classification are combined using a **scikit-learn Pipeline**:
+### 🔹 Machine Learning Pipeline
 
 ```python
 Pipeline([
@@ -158,20 +44,137 @@ Pipeline([
     ('scaler', StandardScaler()),
     ('svm', SVC(kernel='rbf'))
 ])
-````
+```
 
-## 📊 Power BI Dashboard
+---
 
-This dashboard visualizes subject-wise EEG classification performance.
+## 🧪 Methodology
 
-### Key Insights:
-- Average Accuracy: **0.72**
-- Maximum Accuracy: **0.96**
-- Minimum Accuracy: **0.53**
-- Performance categorized into: Excellent, Good, Moderate, Poor
+### 1. EEG Data Loading
 
-<p align="center">
-  <img src="results/powerbi_dashboard.PNG" width="700"/>
-</p>
+- Loaded from `.gdf` files using **MNE**
 
-> Note: The Power BI (.pbix) file is not included due to size constraints.
+### 2. Signal Filtering
+
+- Bandpass filter: **8--30 Hz**
+- Captures **mu and beta rhythms**
+
+### 3. Event Extraction
+
+Code Meaning
+
+---
+
+769 Left Hand
+770 Right Hand
+
+### 4. Epoching
+
+- Time window: **1s--4s**
+- Each epoch = one trial
+
+### 5. Feature Extraction & Classification
+
+- CSP (spatial filtering)
+- StandardScaler (normalization)
+- SVM (RBF kernel)
+
+---
+
+## 📊 Results
+
+### 🔹 Accuracy Across Subjects
+
+- **Average Accuracy:** 0.72\
+- **Best Subject (A08T):** 0.96\
+- **Worst Subject (A05T):** 0.53
+
+### 🔹 Subject-wise Performance
+
+Subject Accuracy Performance
+
+---
+
+A01T 0.76 Good
+A02T 0.61 Moderate
+A03T 0.92 Excellent
+A04T 0.66 Moderate
+A05T 0.53 Poor
+A06T 0.65 Moderate
+A07T 0.76 Good
+A08T 0.96 Excellent
+A09T 0.67 Moderate
+
+---
+
+## 🧠 Key Insights
+
+- EEG classification is **highly subject-dependent**
+- CSP + SVM performs well but is sensitive to:
+  - Noise
+  - Subject variability
+- Some subjects show strong separability, others do not
+
+---
+
+## 📉 Confusion Matrix Insight (Example: A09T)
+
+- Model shows bias toward predicting **Right Hand**
+- Indicates imbalance or feature limitation
+
+---
+
+## 🛠 Installation
+
+```bash
+pip install mne scikit-learn numpy pandas matplotlib
+```
+
+---
+
+## ▶️ Usage
+
+1.  Load EEG data (.gdf files)
+2.  Apply bandpass filtering
+3.  Extract events
+4.  Create epochs
+5.  Train ML pipeline
+6.  Evaluate model
+
+---
+
+## 🚀 Future Improvements
+
+- Deep learning models (**EEGNet, CNNs**)
+- Hyperparameter tuning (**GridSearchCV**)
+- Riemannian geometry approaches
+- Real-time BCI system
+
+---
+
+## 📁 Suggested Project Structure
+
+    ├── data/
+    ├── notebooks/
+    ├── src/
+    │   ├── preprocessing.py
+    │   ├── feature_extraction.py
+    │   ├── model.py
+    ├── results/
+    │   ├── plots/
+    ├── README.md
+
+---
+
+## 📌 Notes
+
+- Power BI dashboard not included due to size constraints
+- Results may vary due to EEG variability
+
+---
+
+## ⭐ Acknowledgments
+
+- BCI Competition IV Dataset
+- MNE Python Library
+- Scikit-learn
